@@ -140,3 +140,29 @@ td, th {
   margin-bottom: 2px;
   font-size: 11px;
 }
+
+.modal {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+.modal-content {
+  background: white;
+  padding: 16px;
+  border-radius: 12px;
+  width: 80%;
+  max-width: 300px;
+}
+
+.modal-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 12px;
+}
+
+.hidden { display: none; }
