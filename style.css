@@ -1,74 +1,85 @@
+/* ===============================
+   BASE
+================================ */
 * {
   box-sizing: border-box;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
 }
 
 body {
   margin: 0;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   background: #f3f3f3;
-  color: #111;
+  color: #1f1f1f;
 }
 
-/* HEADER */
+/* ===============================
+   HEADER
+================================ */
 header {
   display: flex;
   align-items: center;
   gap: 12px;
   padding: 12px 16px;
-  background: rgba(255,255,255,0.8);
-  backdrop-filter: blur(8px);
-  border-bottom: 1px solid #ddd;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-}
-
-h1 {
-  margin: 0;
-  font-size: 20px;
-  font-weight: 600;
+  background: #ffffffcc;
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid #e0e0e0;
 }
 
 #menu-btn {
-  font-size: 22px;
+  font-size: 20px;
   background: none;
   border: none;
   cursor: pointer;
 }
 
-/* NAV MENU */
-nav {
+h1 {
+  font-size: 18px;
+  margin: 0;
+}
+
+/* ===============================
+   MENU
+================================ */
+#menu {
   position: absolute;
   top: 56px;
-  left: 10px;
-  background: rgba(255,255,255,0.85);
-  backdrop-filter: blur(10px);
+  left: 8px;
+  background: #fff;
   border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.12);
   padding: 8px;
-  z-index: 10;
+  z-index: 100;
 }
 
-nav button {
+#menu button {
   display: block;
   width: 100%;
-  background: none;
+  padding: 10px 14px;
+  border-radius: 8px;
   border: none;
-  padding: 10px;
+  background: none;
   text-align: left;
   cursor: pointer;
-  border-radius: 8px;
-  transition: background 0.2s;
 }
 
-nav button:hover {
-  background: rgba(0, 120, 212, 0.1);
+#menu button:hover {
+  background: #f0f0f0;
 }
 
-/* SCREENS */
+/* ===============================
+   SCREENS
+================================ */
 .screen {
   padding: 16px;
 }
 
-/* LIST ITEMS */
+.hidden {
+  display: none !important;
+}
+
+/* ===============================
+   LISTS
+================================ */
 ul {
   list-style: none;
   padding: 0;
@@ -76,179 +87,141 @@ ul {
 }
 
 li {
-  background: rgba(255,255,255,0.8);
-  backdrop-filter: blur(6px);
-  padding: 12px;
-  margin-bottom: 10px;
+  background: #fff;
   border-radius: 12px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.05);
-  transition: transform 0.15s, box-shadow 0.15s;
-}
-
-li:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 16px rgba(0,0,0,0.1);
-}
-
-.status {
-  display: flex;
-  gap: 6px;
-}
-
-.status button {
-  border: none;
-  background: #eee;
-  padding: 6px 10px;
-  border-radius: 8px;
-  font-size: 16px;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-
-.status button.active {
-  background: #0078D4;
-  color: white;
-}
-
-/* ADD INPUT */
-.add {
-  display: flex;
-  gap: 8px;
-  margin-top: 16px;
-}
-
-input {
-  flex: 1;
-  padding: 10px;
-  border-radius: 10px;
-  border: 1px solid #ccc;
-  background: rgba(255,255,255,0.7);
-  backdrop-filter: blur(4px);
-  transition: box-shadow 0.2s;
-}
-
-input:focus {
-  outline: none;
-  box-shadow: 0 0 0 2px #0078D4;
-}
-
-.add button {
-  padding: 0 16px;
-  border-radius: 10px;
-  border: none;
-  background: #0078D4;
-  color: white;
-  font-size: 20px;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-
-.add button:hover {
-  background: #005a9e;
-}
-
-/* MODALS */
-.modal {
-  position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0,0,0,0.3);
+  padding: 12px;
+  margin-bottom: 8px;
   display: flex;
   align-items: center;
-  justify-content: center;
-  z-index: 100;
+  gap: 8px;
 }
 
-.modal-content {
-  background: rgba(255,255,255,0.85);
-  backdrop-filter: blur(12px);
-  padding: 20px;
-  border-radius: 16px;
-  width: 80%;
-  max-width: 320px;
-  box-shadow: 0 6px 24px rgba(0,0,0,0.15);
-  transition: transform 0.2s;
+li small {
+  display: block;
+  color: #666;
 }
 
-.modal-content input {
+/* ===============================
+   BUTTONS
+================================ */
+button {
+  border-radius: 8px;
+  border: none;
+  padding: 6px 10px;
+  cursor: pointer;
+  background: #eaeaea;
+}
+
+button:hover {
+  background: #dedede;
+}
+
+button.active {
+  background: #0078d4;
+  color: white;
+}
+
+/* ===============================
+   PRODUCTS STATUS
+================================ */
+.status button {
+  padding: 4px 6px;
+}
+
+/* ===============================
+   INPUTS
+================================ */
+input, select {
   width: 100%;
-  padding: 8px;
-  margin-bottom: 10px;
+  padding: 10px;
   border-radius: 8px;
   border: 1px solid #ccc;
+  font-size: 14px;
 }
 
-select {
-  font-size: 16px;
-  padding: 6px;
-  border-radius: 8px;
-}
-
-.modal-buttons {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 12px;
-}
-
-.modal-buttons button {
-  flex: 1;
-  margin: 0 4px;
-  padding: 10px;
-  font-size: 16px;
-  border-radius: 10px;
-  border: none;
-  background: #0078D4;
-  color: white;
-  cursor: pointer;
-}
-
-.modal-buttons button:nth-child(2) {
-  background: #888;
-}
-
-.modal-buttons button:hover {
-  opacity: 0.9;
-}
-
-/* WEEK TABLE */
+/* ===============================
+   WEEK TABLE
+================================ */
 table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 12px;
 }
 
 th, td {
-  border: 1px solid #ddd;
-  padding: 6px;
-  vertical-align: top;
+  padding: 8px;
+  text-align: center;
+}
+
+th {
+  background: #f0f0f0;
+  font-weight: 600;
 }
 
 td.cell {
-  min-height: 40px;
+  background: #fff;
+  border-radius: 10px;
   cursor: pointer;
+  min-height: 60px;
+  vertical-align: top;
 }
 
 td.cell span {
-  display: block;
-  background: rgba(0,120,212,0.1);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: #eef3fb;
+  padding: 4px 6px;
   border-radius: 6px;
-  padding: 2px 4px;
-  margin-bottom: 2px;
-  font-size: 11px;
-  transition: background 0.2s;
+  margin: 2px;
+  font-size: 12px;
 }
 
-td.cell span:hover {
-  background: rgba(0,120,212,0.2);
+/* ===============================
+   MODAL (КЛЮЧЕВОЙ ФИКС)
+================================ */
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  display: none;            /* 🔥 важно */
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
 }
 
-td.cell button {
-  border: none;
-  background: transparent;
-  cursor: pointer;
-  font-size: 11px;
-  margin-left: 4px;
-  color: #d32f2f;
+/* модалка показывается ТОЛЬКО если hidden убран */
+.modal:not(.hidden) {
+  display: flex;
+}
+
+.modal-content {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 20px;
+  width: min(90%, 400px);
+  box-shadow: 0 20px 50px rgba(0,0,0,0.25);
+}
+
+.modal-content h3 {
+  margin-top: 0;
+}
+
+/* ===============================
+   MODAL ACTIONS
+================================ */
+.modal-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.modal-actions button {
+  flex: 1;
+}
+
+/* ===============================
+   SAFE AREA (iOS)
+================================ */
+body {
+  padding-bottom: env(safe-area-inset-bottom);
 }
