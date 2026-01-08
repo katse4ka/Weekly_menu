@@ -42,15 +42,26 @@
 
   <!-- Модалки -->
   <div id="modal-product" class="modal hidden">
-    <div class="modal-content">
-      <input id="modal-product-search" placeholder="Поиск продукта">
-      <select id="modal-product-select" size="5"></select>
-      <div class="modal-buttons">
-        <button id="modal-product-add">Добавить</button>
-        <button onclick="closeModal('modal-product')">Отмена</button>
-      </div>
+  <div class="modal-content">
+    <h3>Добавить продукт</h3>
+
+    <input
+      id="modal-product-search"
+      placeholder="Поиск продукта"
+    >
+
+    <select
+      id="modal-product-select"
+      size="5"
+      style="margin-top:10px"
+    ></select>
+
+    <div class="modal-actions">
+      <button id="modal-product-add">Добавить</button>
+      <button onclick="closeModal('modal-product')">Отмена</button>
     </div>
   </div>
+</div>
 
   <div id="modal-dish" class="modal hidden">
     <div class="modal-content">
