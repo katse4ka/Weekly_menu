@@ -25,7 +25,6 @@
   <!-- ПРОДУКТЫ -->
   <section id="products" class="screen">
     <ul id="product-list"></ul>
-
     <div class="add">
       <input id="new-product" placeholder="Новый продукт" />
       <button id="add-product">＋</button>
@@ -35,7 +34,6 @@
   <!-- БЛЮДА -->
   <section id="dishes" class="screen hidden">
     <ul id="dish-list"></ul>
-
     <div class="add">
       <input id="new-dish" placeholder="Новое блюдо" />
       <button id="add-dish">＋</button>
@@ -48,13 +46,12 @@
   </section>
 </main>
 
-<script src="app.js"></script>
-
-<!-- Модалка для выбора продукта в блюде -->
+<!-- Модалки с поиском -->
 <div id="modal-product" class="modal hidden">
   <div class="modal-content">
     <h3>Выберите продукт</h3>
-    <select id="modal-product-select"></select>
+    <input type="text" id="modal-product-search" placeholder="Поиск...">
+    <select id="modal-product-select" size="5" style="width:100%"></select>
     <div class="modal-buttons">
       <button id="modal-product-add">Добавить</button>
       <button onclick="closeModal('modal-product')">Отмена</button>
@@ -62,11 +59,11 @@
   </div>
 </div>
 
-<!-- Модалка для выбора блюда в меню -->
 <div id="modal-dish" class="modal hidden">
   <div class="modal-content">
     <h3>Выберите блюдо</h3>
-    <select id="modal-dish-select"></select>
+    <input type="text" id="modal-dish-search" placeholder="Поиск...">
+    <select id="modal-dish-select" size="5" style="width:100%"></select>
     <div class="modal-buttons">
       <button id="modal-dish-add">Добавить</button>
       <button onclick="closeModal('modal-dish')">Отмена</button>
@@ -74,7 +71,6 @@
   </div>
 </div>
 
-
+<script src="app.js"></script>
 </body>
 </html>
-
