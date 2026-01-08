@@ -1,3 +1,6 @@
+function showAddProductModal(dishIndex) {
+  alert("showAddProductModal вызвана, index = " + dishIndex);
+
 /* ---------- DATA VERSION ---------- */
 const DATA_VERSION = '1.0.6';
 
