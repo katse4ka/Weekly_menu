@@ -49,5 +49,32 @@
 </main>
 
 <script src="app.js"></script>
+
+<!-- Модалка для выбора продукта в блюде -->
+<div id="modal-product" class="modal hidden">
+  <div class="modal-content">
+    <h3>Выберите продукт</h3>
+    <select id="modal-product-select"></select>
+    <div class="modal-buttons">
+      <button id="modal-product-add">Добавить</button>
+      <button onclick="closeModal('modal-product')">Отмена</button>
+    </div>
+  </div>
+</div>
+
+<!-- Модалка для выбора блюда в меню -->
+<div id="modal-dish" class="modal hidden">
+  <div class="modal-content">
+    <h3>Выберите блюдо</h3>
+    <select id="modal-dish-select"></select>
+    <div class="modal-buttons">
+      <button id="modal-dish-add">Добавить</button>
+      <button onclick="closeModal('modal-dish')">Отмена</button>
+    </div>
+  </div>
+</div>
+
+
 </body>
 </html>
+
