@@ -4,23 +4,27 @@
 
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  background: #f7f7f7;
-  color: #222;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background: #f3f3f3;
+  color: #111;
 }
 
+/* HEADER */
 header {
   display: flex;
   align-items: center;
   gap: 12px;
   padding: 12px 16px;
-  background: white;
+  background: rgba(255,255,255,0.8);
+  backdrop-filter: blur(8px);
   border-bottom: 1px solid #ddd;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
 }
 
 h1 {
   margin: 0;
   font-size: 20px;
+  font-weight: 600;
 }
 
 #menu-btn {
@@ -30,11 +34,13 @@ h1 {
   cursor: pointer;
 }
 
+/* NAV MENU */
 nav {
   position: absolute;
   top: 56px;
   left: 10px;
-  background: white;
+  background: rgba(255,255,255,0.85);
+  backdrop-filter: blur(10px);
   border-radius: 12px;
   box-shadow: 0 4px 20px rgba(0,0,0,0.15);
   padding: 8px;
@@ -49,12 +55,20 @@ nav button {
   padding: 10px;
   text-align: left;
   cursor: pointer;
+  border-radius: 8px;
+  transition: background 0.2s;
 }
 
-.screen { padding: 16px; }
+nav button:hover {
+  background: rgba(0, 120, 212, 0.1);
+}
 
-.hidden { display: none; }
+/* SCREENS */
+.screen {
+  padding: 16px;
+}
 
+/* LIST ITEMS */
 ul {
   list-style: none;
   padding: 0;
@@ -62,13 +76,21 @@ ul {
 }
 
 li {
-  background: white;
+  background: rgba(255,255,255,0.8);
+  backdrop-filter: blur(6px);
   padding: 12px;
-  margin-bottom: 8px;
-  border-radius: 10px;
+  margin-bottom: 10px;
+  border-radius: 12px;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 8px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+
+li:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.1);
 }
 
 .status {
@@ -82,13 +104,16 @@ li {
   padding: 6px 10px;
   border-radius: 8px;
   font-size: 16px;
+  cursor: pointer;
+  transition: background 0.2s;
 }
 
 .status button.active {
-  background: #222;
+  background: #0078D4;
   color: white;
 }
 
+/* ADD INPUT */
 .add {
   display: flex;
   gap: 8px;
@@ -100,22 +125,36 @@ input {
   padding: 10px;
   border-radius: 10px;
   border: 1px solid #ccc;
+  background: rgba(255,255,255,0.7);
+  backdrop-filter: blur(4px);
+  transition: box-shadow 0.2s;
+}
+
+input:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px #0078D4;
 }
 
 .add button {
   padding: 0 16px;
   border-radius: 10px;
   border: none;
-  background: #222;
+  background: #0078D4;
   color: white;
   font-size: 20px;
+  cursor: pointer;
+  transition: background 0.2s;
 }
 
-/* Модалки */
+.add button:hover {
+  background: #005a9e;
+}
+
+/* MODALS */
 .modal {
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0,0,0,0.4);
+  background: rgba(0,0,0,0.3);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -123,17 +162,20 @@ input {
 }
 
 .modal-content {
-  background: white;
-  padding: 16px;
-  border-radius: 12px;
+  background: rgba(255,255,255,0.85);
+  backdrop-filter: blur(12px);
+  padding: 20px;
+  border-radius: 16px;
   width: 80%;
-  max-width: 300px;
+  max-width: 320px;
+  box-shadow: 0 6px 24px rgba(0,0,0,0.15);
+  transition: transform 0.2s;
 }
 
 .modal-content input {
   width: 100%;
   padding: 8px;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
   border-radius: 8px;
   border: 1px solid #ccc;
 }
@@ -155,38 +197,58 @@ select {
   margin: 0 4px;
   padding: 10px;
   font-size: 16px;
-  border-radius: 8px;
+  border-radius: 10px;
   border: none;
-  background: #222;
+  background: #0078D4;
   color: white;
+  cursor: pointer;
 }
 
 .modal-buttons button:nth-child(2) {
   background: #888;
 }
 
-/* Таблица меню недели */
+.modal-buttons button:hover {
+  opacity: 0.9;
+}
+
+/* WEEK TABLE */
 table {
   width: 100%;
   border-collapse: collapse;
   font-size: 12px;
 }
 
-td, th {
+th, td {
   border: 1px solid #ddd;
   padding: 6px;
   vertical-align: top;
 }
 
-.cell {
+td.cell {
   min-height: 40px;
+  cursor: pointer;
 }
 
-.cell span {
+td.cell span {
   display: block;
-  background: #eee;
+  background: rgba(0,120,212,0.1);
   border-radius: 6px;
   padding: 2px 4px;
   margin-bottom: 2px;
   font-size: 11px;
+  transition: background 0.2s;
+}
+
+td.cell span:hover {
+  background: rgba(0,120,212,0.2);
+}
+
+td.cell button {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 11px;
+  margin-left: 4px;
+  color: #d32f2f;
 }
