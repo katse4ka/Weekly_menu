@@ -1,4 +1,11 @@
-console.log("APP VERSION 1.0.5 LOADED");
+/* ---------- DATA VERSION ---------- */
+const DATA_VERSION = '1.0.4';
+
+// Если версия данных изменилась — сбрасываем старые данные
+if (localStorage.getItem('data_version') !== DATA_VERSION) {
+  localStorage.clear();
+  localStorage.setItem('data_version', DATA_VERSION);
+}
 
 /* ---------- STATE ---------- */
 let products = JSON.parse(localStorage.getItem("products")) || [];
@@ -150,90 +157,4 @@ function updateDishModalSelect() {
     .join("");
 }
 
-document.getElementById("modal-dish-search").oninput = updateDishModalSelect;
-
-document.getElementById("modal-dish-add").onclick = () => {
-  const select = document.getElementById("modal-dish-select");
-  const name = select.value;
-  if (!week[currentDay]) week[currentDay] = {};
-  if (!week[currentDay][currentMeal]) week[currentDay][currentMeal] = [];
-  week[currentDay][currentMeal].push(name);
-  save(); renderWeek(); closeModal("modal-dish");
-};
-
-/* ---------- WEEK MENU ---------- */
-const table = document.getElementById("week-table");
-
-function renderWeek() {
-  table.innerHTML = `
-    <tr>
-      <th></th>
-      ${days.map(d => `<th>${d}</th>`).join("")}
-    </tr>
-    ${meals.map(m => `
-      <tr>
-        <th>${m}</th>
-        ${days.map(d => `<td class="cell" data-day="${d}" data-meal="${m}"></td>`).join("")}
-      </tr>`).join("")}
-  `;
-
-  // Навешиваем обработчики на ячейки и кнопки
-  document.querySelectorAll("#week-table td.cell").forEach(td => {
-    const day = td.dataset.day;
-    const meal = td.dataset.meal;
-
-    // Клик по ячейке → открывает модалку только при клике
-    td.onclick = () => showAddDishModal(day, meal);
-
-    // Заполняем блюда
-    td.innerHTML = "";
-    const cellDishes = (week[day]?.[meal] || []);
-    cellDishes.forEach((dish, i) => {
-      const span = document.createElement("span");
-      span.textContent = dish + " ";
-
-      const btn = document.createElement("button");
-      btn.textContent = "✖";
-
-      // Обработчик удаления
-      btn.addEventListener("click", e => {
-        e.stopPropagation(); // чтобы клик не открыл модалку
-        deleteDishFromCell(day, meal, i);
-      });
-
-      span.appendChild(btn);
-      td.appendChild(span);
-    });
-  });
-}
-
-/* ---------- EDIT / DELETE ---------- */
-// Products
-function deleteProduct(i) { if(!confirm("Удалить продукт?")) return; products.splice(i,1); save(); renderProducts();}
-function editProduct(i){ const newName = prompt("Новое имя продукта", products[i].name); if(!newName)return; products[i].name=newName; save(); renderProducts();}
-
-// Dishes
-function deleteDish(i){ if(!confirm("Удалить блюдо?")) return; dishes.splice(i,1); save(); renderDishes();}
-function editDish(i){ const newName = prompt("Новое имя блюда", dishes[i].name); if(!newName)return; dishes[i].name=newName; save(); renderDishes();}
-
-// Menu
-function deleteDishFromCell(day, meal, index){ week[day][meal].splice(index,1); save(); renderWeek();}
-
-/* ---------- MODAL HELPERS ---------- */
-function openModal(modalId){ document.getElementById(modalId).classList.remove("hidden");}
-function closeModal(modalId){ document.getElementById(modalId).classList.add("hidden");}
-
-/* ---------- INIT ---------- */
-renderProducts();
-renderDishes();
-renderWeek();
-
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('service-worker.js')
-    .then(reg => console.log('[SW] Registered', reg))
-    .catch(err => console.warn('[SW] Registration failed', err));
-}
-
-
-
-
+document.getElementById("modal-dish-search").on
