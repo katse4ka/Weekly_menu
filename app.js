@@ -98,6 +98,20 @@ function renderDishes() {
   });
 }
 
+document.getElementById("add-dish").onclick = () => {
+  const input = document.getElementById("new-dish");
+  if (!input.value) return;
+
+  dishes.push({
+    name: input.value,
+    ingredients: []
+  });
+
+  input.value = "";
+  save();
+  renderDishes();
+};
+
 /* ---------- MODAL PRODUCT ---------- */
 let currentDishIndex = null;
 
