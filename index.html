@@ -7,23 +7,47 @@
 
   <link rel="manifest" href="manifest.json">
   <link rel="stylesheet" href="style.css">
-
 </head>
 <body>
 
-  <header>
-    <h1>Продукты</h1>
-  </header>
+<header>
+  <button id="menu-btn">☰</button>
+  <h1 id="title">Продукты</h1>
+</header>
 
-  <main>
+<nav id="menu" class="hidden">
+  <button data-screen="products">Продукты</button>
+  <button data-screen="dishes">Блюда</button>
+  <button data-screen="week">Меню недели</button>
+</nav>
+
+<main>
+  <!-- ПРОДУКТЫ -->
+  <section id="products" class="screen">
     <ul id="product-list"></ul>
 
     <div class="add">
       <input id="new-product" placeholder="Новый продукт" />
-      <button id="add-btn">＋</button>
+      <button id="add-product">＋</button>
     </div>
-  </main>
+  </section>
 
-  <script src="app.js"></script>
+  <!-- БЛЮДА -->
+  <section id="dishes" class="screen hidden">
+    <ul id="dish-list"></ul>
+
+    <div class="add">
+      <input id="new-dish" placeholder="Новое блюдо" />
+      <button id="add-dish">＋</button>
+    </div>
+  </section>
+
+  <!-- МЕНЮ НЕДЕЛИ -->
+  <section id="week" class="screen hidden">
+    <table id="week-table"></table>
+  </section>
+</main>
+
+<script src="app.js"></script>
 </body>
 </html>
