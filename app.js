@@ -175,31 +175,34 @@ function renderWeek() {
       </tr>`).join("")}
   `;
 
+  // Навешиваем обработчики на ячейки и кнопки
   document.querySelectorAll("#week-table td.cell").forEach(td => {
     const day = td.dataset.day;
     const meal = td.dataset.meal;
 
-    // Добавляем клик для открытия модалки
-    td.addEventListener("click", () => showAddDishModal(day, meal));
+    // Клик по ячейке → открывает модалку
+    td.onclick = () => showAddDishModal(day, meal);
 
-    // Заполняем блюда в ячейке
     td.innerHTML = "";
     const cellDishes = (week[day]?.[meal] || []);
     cellDishes.forEach((dish, i) => {
       const span = document.createElement("span");
       span.textContent = dish + " ";
+
       const btn = document.createElement("button");
       btn.textContent = "✖";
+
+      // Обработчик удаления
       btn.addEventListener("click", e => {
         e.stopPropagation(); // чтобы клик не открыл модалку
         deleteDishFromCell(day, meal, i);
       });
+
       span.appendChild(btn);
       td.appendChild(span);
     });
   });
 }
-
 
 /* ---------- EDIT / DELETE ---------- */
 // Products
@@ -225,4 +228,3 @@ renderWeek();
 if("serviceWorker" in navigator){
   navigator.serviceWorker.register("service-worker.js");
 }
-
