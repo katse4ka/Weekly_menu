@@ -228,8 +228,12 @@ renderProducts();
 renderDishes();
 renderWeek();
 
-// if ("serviceWorker" in navigator) {
-//   navigator.serviceWorker.register("service-worker.js");
-// }
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('service-worker.js')
+    .then(reg => console.log('[SW] Registered', reg))
+    .catch(err => console.warn('[SW] Registration failed', err));
+}
+
+
 
 
