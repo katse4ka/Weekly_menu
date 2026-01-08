@@ -1,3 +1,5 @@
+console.log("APP VERSION 1.0.5 LOADED");
+
 /* ---------- STATE ---------- */
 let products = JSON.parse(localStorage.getItem("products")) || [];
 let dishes = JSON.parse(localStorage.getItem("dishes")) || [];
@@ -226,6 +228,8 @@ renderProducts();
 renderDishes();
 renderWeek();
 
-if("serviceWorker" in navigator){
-  navigator.serviceWorker.register("service-worker.js");
-}
+// if ("serviceWorker" in navigator) {
+//   navigator.serviceWorker.register("service-worker.js");
+// }
+
+
