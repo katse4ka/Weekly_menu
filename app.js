@@ -1,5 +1,5 @@
 /* ---------- DATA VERSION ---------- */
-const DATA_VERSION = '1.0.5';
+const DATA_VERSION = '1.0.6';
 
 // Сбрасываем старые данные при обновлении версии
 if (localStorage.getItem('data_version') !== DATA_VERSION) {
@@ -109,7 +109,7 @@ function showAddProductModal(dishIndex) {
   currentDishIndex = dishIndex;
   document.getElementById("modal-product-search").value = "";
   updateProductModalSelect();
-  openModal("modal-product");
+  openModal("modal-product"); // ❌ вызывается только по клику
 }
 
 function updateProductModalSelect() {
@@ -143,4 +143,91 @@ function showAddDishModal(day, meal) {
   }
   currentDay = day;
   currentMeal = meal;
-  document.getElementById("modal-dish-search").
+  document.getElementById("modal-dish-search").value = "";
+  updateDishModalSelect();
+  openModal("modal-dish"); // ✅ вызывается только по клику
+}
+
+function updateDishModalSelect() {
+  const filter = document.getElementById("modal-dish-search").value.toLowerCase();
+  const select = document.getElementById("modal-dish-select");
+  select.innerHTML = dishes
+    .filter(d => d.name.toLowerCase().includes(filter))
+    .map(d => `<option value="${d.name}">${d.name}</option>`)
+    .join("");
+}
+
+document.getElementById("modal-dish-search").oninput = updateDishModalSelect;
+
+document.getElementById("modal-dish-add").onclick = () => {
+  const select = document.getElementById("modal-dish-select");
+  const name = select.value;
+  if (!week[currentDay]) week[currentDay] = {};
+  if (!week[currentDay][currentMeal]) week[currentDay][currentMeal] = [];
+  week[currentDay][currentMeal].push(name);
+  save(); renderWeek(); closeModal("modal-dish");
+};
+
+/* ---------- WEEK MENU ---------- */
+const table = document.getElementById("week-table");
+
+function renderWeek() {
+  table.innerHTML = `
+    <tr>
+      <th></th>
+      ${days.map(d => `<th>${d}</th>`).join("")}
+    </tr>
+    ${meals.map(m => `
+      <tr>
+        <th>${m}</th>
+        ${days.map(d => `<td class="cell" data-day="${d}" data-meal="${m}"></td>`).join("")}
+      </tr>`).join("")}
+  `;
+
+  document.querySelectorAll("#week-table td.cell").forEach(td => {
+    const day = td.dataset.day;
+    const meal = td.dataset.meal;
+
+    td.onclick = () => showAddDishModal(day, meal); // ✅ по клику, не при старте
+
+    td.innerHTML = "";
+    const cellDishes = (week[day]?.[meal] || []);
+    cellDishes.forEach((dish, i) => {
+      const span = document.createElement("span");
+      span.textContent = dish + " ";
+
+      const btn = document.createElement("button");
+      btn.textContent = "✖";
+      btn.addEventListener("click", e => {
+        e.stopPropagation();
+        deleteDishFromCell(day, meal, i);
+      });
+
+      span.appendChild(btn);
+      td.appendChild(span);
+    });
+  });
+}
+
+/* ---------- EDIT / DELETE ---------- */
+function deleteProduct(i) { if(!confirm("Удалить продукт?")) return; products.splice(i,1); save(); renderProducts();}
+function editProduct(i){ const newName = prompt("Новое имя продукта", products[i].name); if(!newName)return; products[i].name=newName; save(); renderProducts();}
+function deleteDish(i){ if(!confirm("Удалить блюдо?")) return; dishes.splice(i,1); save(); renderDishes();}
+function editDish(i){ const newName = prompt("Новое имя блюда", dishes[i].name); if(!newName)return; dishes[i].name=newName; save(); renderDishes();}
+function deleteDishFromCell(day, meal, index){ week[day][meal].splice(index,1); save(); renderWeek();}
+
+/* ---------- MODAL HELPERS ---------- */
+function openModal(modalId){ document.getElementById(modalId).classList.remove("hidden");}
+function closeModal(modalId){ document.getElementById(modalId).classList.add("hidden");}
+
+/* ---------- INIT ---------- */
+renderProducts();
+renderDishes();
+renderWeek();
+
+/* ---------- SERVICE WORKER ---------- */
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('service-worker.js')
+    .then(reg => console.log('[SW] Registered', reg))
+    .catch(err => console.warn('[SW] Registration failed', err));
+}
