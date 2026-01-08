@@ -79,3 +79,64 @@ input {
   color: white;
   font-size: 20px;
 }
+
+header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+#menu-btn {
+  font-size: 22px;
+  background: none;
+  border: none;
+}
+
+nav {
+  position: absolute;
+  top: 56px;
+  left: 10px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+  padding: 8px;
+  z-index: 10;
+}
+
+nav button {
+  display: block;
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 10px;
+  text-align: left;
+}
+
+.hidden {
+  display: none;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+
+td, th {
+  border: 1px solid #ddd;
+  padding: 6px;
+  vertical-align: top;
+}
+
+.cell {
+  min-height: 40px;
+}
+
+.cell span {
+  display: block;
+  background: #eee;
+  border-radius: 6px;
+  padding: 2px 4px;
+  margin-bottom: 2px;
+  font-size: 11px;
+}
