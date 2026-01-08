@@ -98,10 +98,21 @@ function showAddProductModal(dishIndex) {
     return;
   }
   currentDishIndex = dishIndex;
-  const select = document.getElementById("modal-product-select");
-  select.innerHTML = products.map(p => `<option value="${p.name}">${p.name}</option>`).join("");
+  document.getElementById("modal-product-search").value = "";
+  updateProductModalSelect();
   openModal("modal-product");
 }
+
+function updateProductModalSelect() {
+  const filter = document.getElementById("modal-product-search").value.toLowerCase();
+  const select = document.getElementById("modal-product-select");
+  select.innerHTML = products
+    .filter(p => p.name.toLowerCase().includes(filter))
+    .map(p => `<option value="${p.name}">${p.name}</option>`)
+    .join("");
+}
+
+document.getElementById("modal-product-search").oninput = updateProductModalSelect;
 
 document.getElementById("modal-product-add").onclick = () => {
   const select = document.getElementById("modal-product-select");
@@ -123,10 +134,21 @@ function showAddDishModal(day, meal) {
   }
   currentDay = day;
   currentMeal = meal;
-  const select = document.getElementById("modal-dish-select");
-  select.innerHTML = dishes.map(d => `<option value="${d.name}">${d.name}</option>`).join("");
+  document.getElementById("modal-dish-search").value = "";
+  updateDishModalSelect();
   openModal("modal-dish");
 }
+
+function updateDishModalSelect() {
+  const filter = document.getElementById("modal-dish-search").value.toLowerCase();
+  const select = document.getElementById("modal-dish-select");
+  select.innerHTML = dishes
+    .filter(d => d.name.toLowerCase().includes(filter))
+    .map(d => `<option value="${d.name}">${d.name}</option>`)
+    .join("");
+}
+
+document.getElementById("modal-dish-search").oninput = updateDishModalSelect;
 
 document.getElementById("modal-dish-add").onclick = () => {
   const select = document.getElementById("modal-dish-select");
@@ -159,55 +181,26 @@ function renderWeek() {
 }
 
 /* ---------- EDIT / DELETE ---------- */
-
 // Products
-function deleteProduct(i) {
-  if (!confirm("Удалить продукт?")) return;
-  products.splice(i,1);
-  save(); renderProducts();
-}
-
-function editProduct(i) {
-  const newName = prompt("Новое имя продукта", products[i].name);
-  if (!newName) return;
-  products[i].name = newName;
-  save(); renderProducts();
-}
+function deleteProduct(i) { if(!confirm("Удалить продукт?")) return; products.splice(i,1); save(); renderProducts();}
+function editProduct(i){ const newName = prompt("Новое имя продукта", products[i].name); if(!newName)return; products[i].name=newName; save(); renderProducts();}
 
 // Dishes
-function deleteDish(i) {
-  if (!confirm("Удалить блюдо?")) return;
-  dishes.splice(i,1);
-  save(); renderDishes();
-}
-
-function editDish(i) {
-  const newName = prompt("Новое имя блюда", dishes[i].name);
-  if (!newName) return;
-  dishes[i].name = newName;
-  save(); renderDishes();
-}
+function deleteDish(i){ if(!confirm("Удалить блюдо?")) return; dishes.splice(i,1); save(); renderDishes();}
+function editDish(i){ const newName = prompt("Новое имя блюда", dishes[i].name); if(!newName)return; dishes[i].name=newName; save(); renderDishes();}
 
 // Menu
-function deleteDishFromCell(day, meal, index) {
-  week[day][meal].splice(index,1);
-  save(); renderWeek();
-}
+function deleteDishFromCell(day, meal, index){ week[day][meal].splice(index,1); save(); renderWeek();}
 
 /* ---------- MODAL HELPERS ---------- */
-function openModal(modalId) {
-  document.getElementById(modalId).classList.remove("hidden");
-}
-
-function closeModal(modalId) {
-  document.getElementById(modalId).classList.add("hidden");
-}
+function openModal(modalId){ document.getElementById(modalId).classList.remove("hidden");}
+function closeModal(modalId){ document.getElementById(modalId).classList.add("hidden");}
 
 /* ---------- INIT ---------- */
 renderProducts();
 renderDishes();
 renderWeek();
 
-if ("serviceWorker" in navigator) {
+if("serviceWorker" in navigator){
   navigator.serviceWorker.register("service-worker.js");
 }
