@@ -1,77 +1,67 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Меню</title>
-
-  <link rel="manifest" href="manifest.json">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Меню Планировщик</title>
   <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="manifest.json">
 </head>
 <body>
 
-<header>
-  <button id="menu-btn">☰</button>
-  <h1 id="title">Продукты</h1>
-</header>
+  <header>
+    <button id="menu-btn">☰</button>
+    <h1 id="title">Меню недели</h1>
+  </header>
 
-<nav id="menu" class="hidden">
-  <button data-screen="products">Продукты</button>
-  <button data-screen="dishes">Блюда</button>
-  <button data-screen="week">Меню недели</button>
-</nav>
+  <nav id="menu" class="hidden">
+    <button data-screen="products">Продукты</button>
+    <button data-screen="dishes">Блюда</button>
+    <button data-screen="week">Меню недели</button>
+  </nav>
 
-<main>
-  <!-- ПРОДУКТЫ -->
-  <section id="products" class="screen">
-    <ul id="product-list"></ul>
-    <div class="add">
-      <input id="new-product" placeholder="Новый продукт" />
-      <button id="add-product">＋</button>
-    </div>
-  </section>
+  <main>
+    <section id="products" class="screen">
+      <ul id="product-list"></ul>
+      <div class="add">
+        <input id="new-product" placeholder="Новый продукт">
+        <button id="add-product">＋</button>
+      </div>
+    </section>
 
-  <!-- БЛЮДА -->
-  <section id="dishes" class="screen hidden">
-    <ul id="dish-list"></ul>
-    <div class="add">
-      <input id="new-dish" placeholder="Новое блюдо" />
-      <button id="add-dish">＋</button>
-    </div>
-  </section>
+    <section id="dishes" class="screen hidden">
+      <ul id="dish-list"></ul>
+    </section>
 
-  <!-- МЕНЮ НЕДЕЛИ -->
-  <section id="week" class="screen hidden">
-    <table id="week-table"></table>
-  </section>
-</main>
+    <section id="week" class="screen hidden">
+      <table id="week-table"></table>
+    </section>
+  </main>
 
-<!-- Модалки с поиском -->
-<div id="modal-product" class="modal hidden">
-  <div class="modal-content">
-    <h3>Выберите продукт</h3>
-    <input type="text" id="modal-product-search" placeholder="Поиск...">
-    <select id="modal-product-select" size="5" style="width:100%"></select>
-    <div class="modal-buttons">
-      <button id="modal-product-add">Добавить</button>
-      <button onclick="closeModal('modal-product')">Отмена</button>
+  <!-- Модалки -->
+  <div id="modal-product" class="modal hidden">
+    <div class="modal-content">
+      <input id="modal-product-search" placeholder="Поиск продукта">
+      <select id="modal-product-select" size="5"></select>
+      <div class="modal-buttons">
+        <button id="modal-product-add">Добавить</button>
+        <button onclick="closeModal('modal-product')">Отмена</button>
+      </div>
     </div>
   </div>
-</div>
 
-<div id="modal-dish" class="modal hidden">
-  <div class="modal-content">
-    <h3>Выберите блюдо</h3>
-    <input type="text" id="modal-dish-search" placeholder="Поиск...">
-    <select id="modal-dish-select" size="5" style="width:100%"></select>
-    <div class="modal-buttons">
-      <button id="modal-dish-add">Добавить</button>
-      <button onclick="closeModal('modal-dish')">Отмена</button>
+  <div id="modal-dish" class="modal hidden">
+    <div class="modal-content">
+      <input id="modal-dish-search" placeholder="Поиск блюда">
+      <select id="modal-dish-select" size="5"></select>
+      <div class="modal-buttons">
+        <button id="modal-dish-add">Добавить</button>
+        <button onclick="closeModal('modal-dish')">Отмена</button>
+      </div>
     </div>
   </div>
-</div>
 
-<script src="app.js?v=1.0.5"></script>
+  <!-- Подключаем app.js с версией -->
+  <script src="app.js?v=1.0.3" type="module"></script>
 </body>
 </html>
-
