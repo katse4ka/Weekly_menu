@@ -1,5 +1,4 @@
 /* ---------- STATE ---------- */
-
 let products = JSON.parse(localStorage.getItem("products")) || [];
 let dishes = JSON.parse(localStorage.getItem("dishes")) || [];
 let week = JSON.parse(localStorage.getItem("week")) || {};
@@ -8,7 +7,6 @@ const days = ["Пн","Вт","Ср","Чт","Пт","Сб","Вс"];
 const meals = ["Завтрак","Обед","Ужин"];
 
 /* ---------- SAVE ---------- */
-
 function save() {
   localStorage.setItem("products", JSON.stringify(products));
   localStorage.setItem("dishes", JSON.stringify(dishes));
@@ -16,7 +14,6 @@ function save() {
 }
 
 /* ---------- NAV ---------- */
-
 const menuBtn = document.getElementById("menu-btn");
 const menu = document.getElementById("menu");
 const title = document.getElementById("title");
@@ -39,7 +36,6 @@ function showScreen(name) {
 }
 
 /* ---------- PRODUCTS ---------- */
-
 const productList = document.getElementById("product-list");
 
 function renderProducts() {
@@ -54,7 +50,10 @@ function renderProducts() {
             onclick="setStatus(${i},'${s}')">
             ${s==="have"?"🟢":s==="low"?"🟡":"🔴"}
           </button>`).join("")}
-      </div>`;
+      </div>
+      <button onclick="editProduct(${i})">✎</button>
+      <button onclick="deleteProduct(${i})">🗑</button>
+    `;
     productList.appendChild(li);
   });
 }
@@ -73,7 +72,6 @@ document.getElementById("add-product").onclick = () => {
 };
 
 /* ---------- DISHES ---------- */
-
 const dishList = document.getElementById("dish-list");
 
 function renderDishes() {
@@ -83,41 +81,63 @@ function renderDishes() {
     li.innerHTML = `
       <strong>${d.name}</strong>
       <small>${d.ingredients.join(", ")}</small>
-      <button onclick="addIngredient(${i})">＋ продукт</button>
+      <button onclick="showAddProductModal(${i})">＋ продукт</button>
+      <button onclick="editDish(${i})">✎</button>
+      <button onclick="deleteDish(${i})">🗑</button>
     `;
     dishList.appendChild(li);
   });
 }
 
-window.addIngredient = (i) => {
+/* ---------- MODAL PRODUCT ---------- */
+let currentDishIndex = null;
+
+function showAddProductModal(dishIndex) {
   if (products.length === 0) {
     alert("Сначала добавь продукты");
     return;
   }
+  currentDishIndex = dishIndex;
+  const select = document.getElementById("modal-product-select");
+  select.innerHTML = products.map(p => `<option value="${p.name}">${p.name}</option>`).join("");
+  openModal("modal-product");
+}
 
-  const productNames = products.map(p => p.name).join("\n");
-  const name = prompt(
-    "Выбери продукт (введи ТОЧНО как в списке):\n\n" + productNames
-  );
-
-  if (!name) return;
-  if (!products.find(p => p.name === name)) return;
-
-  dishes[i].ingredients.push(name);
-  save();
-  renderDishes();
+document.getElementById("modal-product-add").onclick = () => {
+  const select = document.getElementById("modal-product-select");
+  const name = select.value;
+  if (name && currentDishIndex != null) {
+    dishes[currentDishIndex].ingredients.push(name);
+    save(); renderDishes(); closeModal("modal-product");
+  }
 };
 
-document.getElementById("add-dish").onclick = () => {
-  const input = document.getElementById("new-dish");
-  if (!input.value) return;
-  dishes.push({ name: input.value, ingredients: [] });
-  input.value = "";
-  save(); renderDishes();
+/* ---------- MODAL DISH ---------- */
+let currentDay = null;
+let currentMeal = null;
+
+function showAddDishModal(day, meal) {
+  if (dishes.length === 0) {
+    alert("Сначала добавь блюда");
+    return;
+  }
+  currentDay = day;
+  currentMeal = meal;
+  const select = document.getElementById("modal-dish-select");
+  select.innerHTML = dishes.map(d => `<option value="${d.name}">${d.name}</option>`).join("");
+  openModal("modal-dish");
+}
+
+document.getElementById("modal-dish-add").onclick = () => {
+  const select = document.getElementById("modal-dish-select");
+  const name = select.value;
+  if (!week[currentDay]) week[currentDay] = {};
+  if (!week[currentDay][currentMeal]) week[currentDay][currentMeal] = [];
+  week[currentDay][currentMeal].push(name);
+  save(); renderWeek(); closeModal("modal-dish");
 };
 
 /* ---------- WEEK MENU ---------- */
-
 const table = document.getElementById("week-table");
 
 function renderWeek() {
@@ -130,37 +150,60 @@ function renderWeek() {
       <tr>
         <th>${m}</th>
         ${days.map(d => `
-          <td class="cell" onclick="addToCell('${d}','${m}')">
-            ${(week[d]?.[m]||[]).map(x=>`<span>${x}</span>`).join("")}
+          <td class="cell" onclick="showAddDishModal('${d}','${m}')">
+            ${(week[d]?.[m]||[]).map((x,i)=>`
+              <span>${x} <button onclick="deleteDishFromCell('${d}','${m}',${i})">✖</button></span>`).join("")}
           </td>`).join("")}
       </tr>`).join("")}
   `;
 }
 
-window.addToCell = (day, meal) => {
-  if (dishes.length === 0) {
-    alert("Сначала добавь блюда");
-    return;
-  }
+/* ---------- EDIT / DELETE ---------- */
 
-  const dishNames = dishes.map(d => d.name).join("\n");
-  const name = prompt(
-    "Выбери блюдо (введи ТОЧНО как в списке):\n\n" + dishNames
-  );
+// Products
+function deleteProduct(i) {
+  if (!confirm("Удалить продукт?")) return;
+  products.splice(i,1);
+  save(); renderProducts();
+}
 
-  if (!name) return;
-  if (!dishes.find(d => d.name === name)) return;
+function editProduct(i) {
+  const newName = prompt("Новое имя продукта", products[i].name);
+  if (!newName) return;
+  products[i].name = newName;
+  save(); renderProducts();
+}
 
-  week[day] ??= {};
-  week[day][meal] ??= [];
-  week[day][meal].push(name);
+// Dishes
+function deleteDish(i) {
+  if (!confirm("Удалить блюдо?")) return;
+  dishes.splice(i,1);
+  save(); renderDishes();
+}
 
-  save();
-  renderWeek();
-};
+function editDish(i) {
+  const newName = prompt("Новое имя блюда", dishes[i].name);
+  if (!newName) return;
+  dishes[i].name = newName;
+  save(); renderDishes();
+}
+
+// Menu
+function deleteDishFromCell(day, meal, index) {
+  week[day][meal].splice(index,1);
+  save(); renderWeek();
+}
+
+/* ---------- MODAL HELPERS ---------- */
+function openModal(modalId) {
+  document.getElementById(modalId).classList.remove("hidden");
+}
+
+function closeModal(modalId) {
+  document.getElementById(modalId).classList.add("hidden");
+}
 
 /* ---------- INIT ---------- */
-
 renderProducts();
 renderDishes();
 renderWeek();
@@ -168,4 +211,3 @@ renderWeek();
 if ("serviceWorker" in navigator) {
   navigator.serviceWorker.register("service-worker.js");
 }
-
