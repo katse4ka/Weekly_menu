@@ -171,13 +171,20 @@ function renderWeek() {
     ${meals.map(m => `
       <tr>
         <th>${m}</th>
-        ${days.map(d => `
-          <td class="cell" onclick="showAddDishModal('${d}','${m}')">
-            ${(week[d]?.[m]||[]).map((x,i)=>`
-              <span>${x} <button onclick="deleteDishFromCell('${d}','${m}',${i})">✖</button></span>`).join("")}
-          </td>`).join("")}
+        ${days.map(d => `<td class="cell" data-day="${d}" data-meal="${m}"></td>`).join("")}
       </tr>`).join("")}
   `;
+
+  // Заполняем блюда в ячейках и навешиваем обработчик клика
+  document.querySelectorAll("#week-table td.cell").forEach(td => {
+    const day = td.dataset.day;
+    const meal = td.dataset.meal;
+    td.onclick = () => showAddDishModal(day, meal);
+
+    td.innerHTML = (week[day]?.[meal] || []).map((x,i) =>
+      `<span>${x} <button onclick="deleteDishFromCell('${day}','${meal}',${i})">✖</button></span>`
+    ).join("");
+  });
 }
 
 /* ---------- EDIT / DELETE ---------- */
