@@ -1,52 +1,144 @@
-const listEl = document.getElementById("product-list");
-const inputEl = document.getElementById("new-product");
-const addBtn = document.getElementById("add-btn");
+/* ---------- STATE ---------- */
 
 let products = JSON.parse(localStorage.getItem("products")) || [];
+let dishes = JSON.parse(localStorage.getItem("dishes")) || [];
+let week = JSON.parse(localStorage.getItem("week")) || {};
+
+const days = ["Пн","Вт","Ср","Чт","Пт","Сб","Вс"];
+const meals = ["Завтрак","Обед","Ужин"];
+
+/* ---------- SAVE ---------- */
 
 function save() {
   localStorage.setItem("products", JSON.stringify(products));
+  localStorage.setItem("dishes", JSON.stringify(dishes));
+  localStorage.setItem("week", JSON.stringify(week));
 }
 
-function render() {
-  listEl.innerHTML = "";
+/* ---------- NAV ---------- */
 
-  products.forEach((product, index) => {
+const menuBtn = document.getElementById("menu-btn");
+const menu = document.getElementById("menu");
+const title = document.getElementById("title");
+
+menuBtn.onclick = () => menu.classList.toggle("hidden");
+
+menu.querySelectorAll("button").forEach(btn => {
+  btn.onclick = () => {
+    showScreen(btn.dataset.screen);
+    menu.classList.add("hidden");
+  };
+});
+
+function showScreen(name) {
+  document.querySelectorAll(".screen").forEach(s => s.classList.add("hidden"));
+  document.getElementById(name).classList.remove("hidden");
+  title.textContent =
+    name === "products" ? "Продукты" :
+    name === "dishes" ? "Блюда" : "Меню недели";
+}
+
+/* ---------- PRODUCTS ---------- */
+
+const productList = document.getElementById("product-list");
+
+function renderProducts() {
+  productList.innerHTML = "";
+  products.forEach((p, i) => {
     const li = document.createElement("li");
-
     li.innerHTML = `
-      <span>${product.name}</span>
+      <span>${p.name}</span>
       <div class="status">
-        ${["have", "low", "none"].map(status => `
-          <button class="${product.status === status ? "active" : ""}"
-                  onclick="setStatus(${index}, '${status}')">
-            ${status === "have" ? "🟢" : status === "low" ? "🟡" : "🔴"}
-          </button>
-        `).join("")}
-      </div>
-    `;
-
-    listEl.appendChild(li);
+        ${["have","low","none"].map(s => `
+          <button class="${p.status===s?"active":""}"
+            onclick="setStatus(${i},'${s}')">
+            ${s==="have"?"🟢":s==="low"?"🟡":"🔴"}
+          </button>`).join("")}
+      </div>`;
+    productList.appendChild(li);
   });
 }
 
-window.setStatus = (index, status) => {
-  products[index].status = status;
-  save();
-  render();
+window.setStatus = (i,s) => {
+  products[i].status = s;
+  save(); renderProducts();
 };
 
-addBtn.onclick = () => {
-  const name = inputEl.value.trim();
+document.getElementById("add-product").onclick = () => {
+  const input = document.getElementById("new-product");
+  if (!input.value) return;
+  products.push({ name: input.value, status: "have" });
+  input.value = "";
+  save(); renderProducts();
+};
+
+/* ---------- DISHES ---------- */
+
+const dishList = document.getElementById("dish-list");
+
+function renderDishes() {
+  dishList.innerHTML = "";
+  dishes.forEach((d, i) => {
+    const li = document.createElement("li");
+    li.innerHTML = `
+      <strong>${d.name}</strong>
+      <small>${d.ingredients.join(", ")}</small>
+      <button onclick="addIngredient(${i})">＋ продукт</button>
+    `;
+    dishList.appendChild(li);
+  });
+}
+
+window.addIngredient = (i) => {
+  const name = prompt("Продукт");
   if (!name) return;
-
-  products.push({ name, status: "have" });
-  inputEl.value = "";
-  save();
-  render();
+  dishes[i].ingredients.push(name);
+  save(); renderDishes();
 };
 
-render();
+document.getElementById("add-dish").onclick = () => {
+  const input = document.getElementById("new-dish");
+  if (!input.value) return;
+  dishes.push({ name: input.value, ingredients: [] });
+  input.value = "";
+  save(); renderDishes();
+};
+
+/* ---------- WEEK MENU ---------- */
+
+const table = document.getElementById("week-table");
+
+function renderWeek() {
+  table.innerHTML = `
+    <tr>
+      <th></th>
+      ${days.map(d => `<th>${d}</th>`).join("")}
+    </tr>
+    ${meals.map(m => `
+      <tr>
+        <th>${m}</th>
+        ${days.map(d => `
+          <td class="cell" onclick="addToCell('${d}','${m}')">
+            ${(week[d]?.[m]||[]).map(x=>`<span>${x}</span>`).join("")}
+          </td>`).join("")}
+      </tr>`).join("")}
+  `;
+}
+
+window.addToCell = (day, meal) => {
+  const dish = prompt("Блюдо");
+  if (!dish) return;
+  week[day] ??= {};
+  week[day][meal] ??= [];
+  week[day][meal].push(dish);
+  save(); renderWeek();
+};
+
+/* ---------- INIT ---------- */
+
+renderProducts();
+renderDishes();
+renderWeek();
 
 if ("serviceWorker" in navigator) {
   navigator.serviceWorker.register("service-worker.js");
