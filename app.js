@@ -1,7 +1,7 @@
 /* ---------- DATA VERSION ---------- */
-const DATA_VERSION = '1.0.4';
+const DATA_VERSION = '1.0.5';
 
-// Если версия данных изменилась — сбрасываем старые данные
+// Сбрасываем старые данные при обновлении версии
 if (localStorage.getItem('data_version') !== DATA_VERSION) {
   localStorage.clear();
   localStorage.setItem('data_version', DATA_VERSION);
@@ -143,18 +143,4 @@ function showAddDishModal(day, meal) {
   }
   currentDay = day;
   currentMeal = meal;
-  document.getElementById("modal-dish-search").value = "";
-  updateDishModalSelect();
-  openModal("modal-dish");
-}
-
-function updateDishModalSelect() {
-  const filter = document.getElementById("modal-dish-search").value.toLowerCase();
-  const select = document.getElementById("modal-dish-select");
-  select.innerHTML = dishes
-    .filter(d => d.name.toLowerCase().includes(filter))
-    .map(d => `<option value="${d.name}">${d.name}</option>`)
-    .join("");
-}
-
-document.getElementById("modal-dish-search").on
+  document.getElementById("modal-dish-search").
