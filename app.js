@@ -90,10 +90,22 @@ function renderDishes() {
 }
 
 window.addIngredient = (i) => {
-  const name = prompt("Продукт");
+  if (products.length === 0) {
+    alert("Сначала добавь продукты");
+    return;
+  }
+
+  const productNames = products.map(p => p.name).join("\n");
+  const name = prompt(
+    "Выбери продукт (введи ТОЧНО как в списке):\n\n" + productNames
+  );
+
   if (!name) return;
+  if (!products.find(p => p.name === name)) return;
+
   dishes[i].ingredients.push(name);
-  save(); renderDishes();
+  save();
+  renderDishes();
 };
 
 document.getElementById("add-dish").onclick = () => {
@@ -126,12 +138,25 @@ function renderWeek() {
 }
 
 window.addToCell = (day, meal) => {
-  const dish = prompt("Блюдо");
-  if (!dish) return;
+  if (dishes.length === 0) {
+    alert("Сначала добавь блюда");
+    return;
+  }
+
+  const dishNames = dishes.map(d => d.name).join("\n");
+  const name = prompt(
+    "Выбери блюдо (введи ТОЧНО как в списке):\n\n" + dishNames
+  );
+
+  if (!name) return;
+  if (!dishes.find(d => d.name === name)) return;
+
   week[day] ??= {};
   week[day][meal] ??= [];
-  week[day][meal].push(dish);
-  save(); renderWeek();
+  week[day][meal].push(name);
+
+  save();
+  renderWeek();
 };
 
 /* ---------- INIT ---------- */
@@ -143,3 +168,4 @@ renderWeek();
 if ("serviceWorker" in navigator) {
   navigator.serviceWorker.register("service-worker.js");
 }
+
