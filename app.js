@@ -180,9 +180,10 @@ function renderWeek() {
     const day = td.dataset.day;
     const meal = td.dataset.meal;
 
-    // Клик по ячейке → открывает модалку
+    // Клик по ячейке → открывает модалку только при клике
     td.onclick = () => showAddDishModal(day, meal);
 
+    // Заполняем блюда
     td.innerHTML = "";
     const cellDishes = (week[day]?.[meal] || []);
     cellDishes.forEach((dish, i) => {
